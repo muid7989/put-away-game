@@ -3,12 +3,11 @@ let frameCountBuffer = 0;
 let fps = 0;
 
 const CANVAS_W = 960;
-const CANVAS_H = 600;
+const CANVAS_H = 1440;
 
-const BUTTON_W = CANVAS_W/5;
-const BUTTON_H = 100;
-const BUTTON_M = 30;
-const BUTTON_Y = CANVAS_H;
+const BUTTON_W = CANVAS_W/4;
+const BUTTON_H = BUTTON_W/2;
+const BUTTON_Y = CANVAS_H*2/3;
 
 const GRID_SIZE = 64;
 const GRID_BASE_X = 100;
@@ -17,10 +16,11 @@ const GRID_X = 12;
 const GRID_Y = 8;
 const PLAYER_SIZE = 56;
 const ITEM_SIZE = 48;
-const ITEM_NUM = 4;
+const ITEM_NUM = 8;
 
 const TARGET_SIZE = 60;
 
+let gui;
 let upButton, downButton, leftButton, rightButton;
 let getButton;
 let startButton;
@@ -34,7 +34,7 @@ let targetPos;
 let timeCount;
 const TEXT_VIEW_SIZE = 32;
 
-const DEBUG_VIEW_X = 20;
+const DEBUG_VIEW_X = 40;
 const DEBUG_VIEW_Y = 20;
 const DEBUG_VIEW_H = 20;
 
@@ -58,7 +58,7 @@ function playerMove(x, y){
 		player.getIndex = null;
 		player.getNum++;
 		if (player.getNum>=ITEM_NUM){
-			startButton.show();
+			startButton.visible = true;
 			endTime = (millis() - startTime)/1000;
 			startFlag = false;
 		}
@@ -90,7 +90,7 @@ function getFn() {
 function startFn() {
 	startFlag = true;
 	startTime = millis();
-	startButton.hide();
+	startButton.visible = false;
 	player.getNum = 0;
 	items = [];
 	for (let i=0; i<ITEM_NUM; i++){
@@ -115,19 +115,18 @@ function setup() {
 	targetPos.y = 7;
 	rectMode(CENTER);
 
-	getButton = buttonInit('get', getFn, BUTTON_W, BUTTON_H, 0, BUTTON_Y);
-	upButton = buttonInit('↑', upFn, BUTTON_W, BUTTON_H, BUTTON_W*1, BUTTON_Y);
-	downButton = buttonInit('↓', downFn, BUTTON_W, BUTTON_H, BUTTON_W*2, BUTTON_Y);
-	leftButton = buttonInit('←', leftFn, BUTTON_W, BUTTON_H, BUTTON_W*3, BUTTON_Y);
-	rightButton = buttonInit('→', rightFn, BUTTON_W, BUTTON_H, BUTTON_W*4, BUTTON_Y);
-	startButton = buttonInit('start', startFn, BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W)/2, 200);
+	gui = createGui();
+	gui.loadStyle("Seafoam");
+	gui.setTextSize(40);
+	getButton = buttonInit('get', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W)/2, BUTTON_Y+BUTTON_H);
+	upButton = buttonInit('↑', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W)/2, BUTTON_Y);
+	downButton = buttonInit('↓', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W)/2, BUTTON_Y+BUTTON_H*2);
+	leftButton = buttonInit('←', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W*3)/2, BUTTON_Y+BUTTON_H);
+	rightButton = buttonInit('→', BUTTON_W, BUTTON_H, (CANVAS_W+BUTTON_W)/2, BUTTON_Y+BUTTON_H);
+	startButton = buttonInit('start', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W)/2, BUTTON_Y-BUTTON_H*1.5);
 }
-function buttonInit(text, callback, w, h, x, y) {
-	let button = createButton(text);
-	button.mouseClicked(callback);
-	button.size(w,h);
-	button.position(x,y);
-	button.style('font-size', '32px');
+function buttonInit(text, w, h, x, y) {
+	let button = createButton(text, x, y, w, h);
 	return button;
 }
 function draw() {
@@ -138,6 +137,12 @@ function draw() {
 		fps = frameCount - frameCountBuffer;
 		frameCountBuffer = frameCount;
 	}
+	if (getButton.isPressed) getFn();
+	if (upButton.isPressed) upFn();
+	if (downButton.isPressed) downFn();
+	if (leftButton.isPressed) leftFn();
+	if (rightButton.isPressed) rightFn();
+	if (startButton.isPressed) startFn();
 	stroke(255);
 	strokeWeight(3);
 	noFill();
@@ -166,6 +171,7 @@ function draw() {
 		textAlign(CENTER);
 		text(endTime.toFixed(1)+' sec', CANVAS_W/2, 128);
 	}
+	drawGui();
 	fill(255);
 	stroke(255);
 	textSize(16);
@@ -174,3 +180,10 @@ function draw() {
 	text('fps:'+fps, DEBUG_VIEW_X, debugY);
 	debugY += DEBUG_VIEW_H;
 }
+function mousePressed(e) {
+	return false;
+}
+document.addEventListener('gesturestart', function(e) {
+	e.preventDefault();
+});
+  
