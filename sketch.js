@@ -96,7 +96,7 @@ function startFn() {
 	for (let i=0; i<ITEM_NUM; i++){
 		items[i] = {};
 		items[i].pos = {};
-		items[i].pos.x = i*2+1;
+		items[i].pos.x = i+1;
 		items[i].pos.y = int(random(8));
 		items[i].enable = true;
 	}
