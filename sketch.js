@@ -53,7 +53,7 @@ function playerMove(x, y){
 	}else if (player.pos.y>=GRID_Y){
 		player.pos.y = GRID_Y-1;
 	}
-	if ((player.pos.x==targetPos.x) && (player.pos.y==targetPos.y)){
+	if ((player.pos.x==targetPos.x) && (player.pos.y==targetPos.y) && (player.getIndex!=null)){
 		items[player.getIndex].enable = false;
 		player.getIndex = null;
 		player.getNum++;
@@ -180,10 +180,6 @@ function draw() {
 	text('fps:'+fps, DEBUG_VIEW_X, debugY);
 	debugY += DEBUG_VIEW_H;
 }
-function mousePressed(e) {
+function touchMoved() {
 	return false;
 }
-document.addEventListener('gesturestart', function(e) {
-	e.preventDefault();
-});
-  
