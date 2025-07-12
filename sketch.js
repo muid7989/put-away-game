@@ -121,9 +121,9 @@ function setup() {
 	getButton = buttonInit('get', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W)/2, BUTTON_Y+BUTTON_H);
 	upButton = buttonInit('↑', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W)/2, BUTTON_Y);
 	downButton = buttonInit('↓', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W)/2, BUTTON_Y+BUTTON_H*2);
-	leftButton = buttonInit('←', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W*3)/2, BUTTON_Y+BUTTON_H);
-	rightButton = buttonInit('→', BUTTON_W, BUTTON_H, (CANVAS_W+BUTTON_W)/2, BUTTON_Y+BUTTON_H);
-	startButton = buttonInit('start', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W)/2, BUTTON_Y-BUTTON_H*1.5);
+//	leftButton = buttonInit('←', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W*3)/2, BUTTON_Y+BUTTON_H);
+//	rightButton = buttonInit('→', BUTTON_W, BUTTON_H, (CANVAS_W+BUTTON_W)/2, BUTTON_Y+BUTTON_H);
+//	startButton = buttonInit('start', BUTTON_W, BUTTON_H, (CANVAS_W-BUTTON_W)/2, BUTTON_Y-BUTTON_H*1.5);
 }
 function buttonInit(text, w, h, x, y) {
 	let button = createButton(text, x, y, w, h);
@@ -137,24 +137,26 @@ function draw() {
 		fps = frameCount - frameCountBuffer;
 		frameCountBuffer = frameCount;
 	}
+
 	if (getButton.isPressed) getFn();
 	if (upButton.isPressed) upFn();
 	if (downButton.isPressed) downFn();
-	if (leftButton.isPressed) leftFn();
-	if (rightButton.isPressed) rightFn();
-	if (startButton.isPressed) startFn();
+//	if (leftButton.isPressed) leftFn();
+//	if (rightButton.isPressed) rightFn();
+//	if (startButton.isPressed) startFn();
+/*
 	stroke(255);
 	strokeWeight(3);
 	noFill();
 	rect(GRID_BASE_X+GRID_SIZE*player.pos.x, GRID_BASE_Y+GRID_SIZE*player.pos.y, PLAYER_SIZE);
+	strokeWeight(1);
+	stroke(255);
+	fill('red');
 	for (let i=0; i<items.length; i++){
 		if (items[i].enable){
-			strokeWeight(1);
-			stroke(255);
-			fill('red');
 			if (player.getIndex==i){
-				strokeWeight(6);
-				stroke('pink');
+	//			strokeWeight(6);
+	//			stroke('pink');
 			}
 			rect(GRID_BASE_X+GRID_SIZE*items[i].pos.x, GRID_BASE_Y+GRID_SIZE*items[i].pos.y, ITEM_SIZE);	
 		}
@@ -171,7 +173,9 @@ function draw() {
 		textAlign(CENTER);
 		text(endTime.toFixed(1)+' sec', CANVAS_W/2, 128);
 	}
+*/
 	drawGui();
+
 	fill(255);
 	stroke(255);
 	textSize(16);
@@ -179,6 +183,7 @@ function draw() {
 	let debugY = DEBUG_VIEW_Y;
 	text('fps:'+fps, DEBUG_VIEW_X, debugY);
 	debugY += DEBUG_VIEW_H;
+
 }
 function touchMoved() {
 	return false;
